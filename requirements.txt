@@ -1,11 +1,10 @@
-streamlit
-pandas
-numpy
+streamlit==1.50.0
+pandas==2.3.3
+numpy==2.3.4
 scikit-learn
 joblib
 mlflow
 seaborn
 matplotlib
 xgboost
-json
-os
+boto3
