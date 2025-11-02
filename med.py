@@ -13,8 +13,8 @@ st.set_page_config(page_title= "Medical Insurance Cost Prediction")
 st.title("Medical Insurance Cost Prediction App")
 
 # --- Paths ---
-model_path = "model/best_model.joblib"
-metrics_path = "model/metrics.json"
+model_path = "best_model.joblib"
+metrics_path = "metrics.json"
 
 
 # --- Load model (ONCE) ---
@@ -210,6 +210,7 @@ if st.button("Predict Insurance Cost"):
     # Optionally show the metric used
     if metrics is not None and method_used is not None:
        st.write(f"Metric used for uncertainty: {method_used} = {uncertainty}")
+
 
 
 
