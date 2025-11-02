@@ -211,6 +211,6 @@ if st.button("Predict Insurance Cost"):
     if metrics is not None and method_used is not None:
        st.write(f"Metric used for uncertainty: {method_used} = {uncertainty}")
 
-uncertainty}")
+
 
 
