@@ -11,33 +11,33 @@ from sklearn.preprocessing import LabelEncoder
 
 st.set_page_config(page_title= "Medical Insurance Cost Prediction")
 st.title("Medical Insurance Cost Prediction App")
-# moel path
-MODEL_PATH = "c:/Users/PRIYANKA/OneDrive/Desktop/model/best_pipeline_Ridge Regression.joblib"
-METRICS_JSON = os.path.join(os.path.dirname(MODEL_PATH),"C:/Users/PRIYANKA/OneDrive/Desktop/model/metrics (1).json")
 
+# --- Paths ---
+model_path = "model/best_model.joblib"
+metrics_path = "model/metrics.json"
+
+
+# --- Load model (ONCE) ---
 try:
-    loaded_model = joblib.load(MODEL_PATH)
-    st.success("Model Loaded successfully")
+    loaded_model = joblib.load(model_path)  # model_path must be a string path
+    st.success(f"Model loaded successfully from: {model_path}")
 except Exception as e:
-    st.error(f"Failed to load model from {MODEL_PATH}: {e}")
+    st.error(f"Failed to load model from '{model_path}': {e}")
     st.stop()
 
-
-#loaded_model = joblib.load("c:/Users/PRIYANKA/OneDrive/Desktop/model/best_pipeline_Ridge Regression.joblib")
-#st.write("Model Loaded Successfully")
-#METRICS_JSON = os.path.join("c:/Users/PRIYANKA/OneDrive/Desktop/model/best_pipeline_Ridge Regression.joblib", "model/metrics.json")
-
-# Try to read training metrics (optional) so we can show CI/error margins
+# --- Load metrics if present ---
 metrics = None
-if os.path.exists(METRICS_JSON):
+if os.path.exists(metrics_path):
     try:
-        with open(METRICS_JSON,"r") as f:
+        with open(metrics_path, "r") as f:
             metrics = json.load(f)
         st.info("Loaded metrics.json — will use reported RMSE/MAE to show approximate error margins.")
     except Exception as e:
-        st.write(f"cound not read metrics.json : {e}")
+        st.warning(f"Could not read metrics.json: {e}")
 else:
-    st.info("No metrics.json found. The app can still show a fallback error margin if desired.")                
+    st.info("No metrics.json found. The app can still show a fallback error margin if desired.")
+
+
 
 df = pd.read_csv("C:/Users/PRIYANKA/Downloads/medical_insurance.csv")
 df
@@ -126,6 +126,9 @@ sample['bmi_category'] = lb.fit_transform(sample['bmi_category'])
 sample['smoker_age'] = sample['smoker'] * sample['age']
 sample['smoker_bmi'] = sample['smoker'] * sample['bmi']
 
+# create obese column for eda
+df['obese'] = df['bmi']>30
+
 # Reindex to match training data columns
 # We need to make sure x_train is available in this scope or load its columns
 # For this example, assuming x_train.columns is accessible or can be reconstructed.
@@ -137,7 +140,7 @@ sample['smoker_bmi'] = sample['smoker'] * sample['bmi']
 # region_southeast, region_southwest, bmi_category, smoker_age, smoker_bmi
 expected_columns = ['age', 'sex', 'bmi', 'children', 'smoker',
                     'region_northwest', 'region_southeast', 'region_southwest',
-                    'bmi_category', 'smoker_age', 'smoker_bmi']
+                    'bmi_category', 'smoker_age', 'smoker_bmi','obese']
 
 sample = sample.reindex(columns=expected_columns, fill_value=0)
 
@@ -207,4 +210,7 @@ if st.button("Predict Insurance Cost"):
     # Optionally show the metric used
     if metrics is not None and method_used is not None:
        st.write(f"Metric used for uncertainty: {method_used} = {uncertainty}")
+
+uncertainty}")
+
 
