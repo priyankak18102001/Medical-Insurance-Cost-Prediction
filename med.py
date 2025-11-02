@@ -39,7 +39,7 @@ else:
 
 
 
-df = pd.read_csv("C:/Users/PRIYANKA/Downloads/medical_insurance.csv")
+df = pd.read_csv("medical_insurance.csv")
 df
 
 st.subheader("Exploratory Data Analysis (EDA)")
@@ -210,6 +210,7 @@ if st.button("Predict Insurance Cost"):
     # Optionally show the metric used
     if metrics is not None and method_used is not None:
        st.write(f"Metric used for uncertainty: {method_used} = {uncertainty}")
+
 
 
 
